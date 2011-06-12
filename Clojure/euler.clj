@@ -1,9 +1,7 @@
 (ns euler
-  (:require [clojure.contrib.string])
-  (:require [clojure.contrib.seq-utils])
-  (:require [clojure.contrib.math])
-  (alias string clojure.contrib.string)
-  (alias math clojure.contrib.math)
-  (alias sequtils clojure.contrib.seq-utils))
+  (:require [clojure.contrib.string :as string])
+  (:require [clojure.contrib.seq-utils :as sequtils])
+  (:require [clojure.contrib.math :as math])
+  (:require [clojure.set :as set]))
 
 
