@@ -1,6 +1,7 @@
 import Data.Map
 import Data.List
 import Debug.Trace
+import Text.Regex
 
 maxInt = 2^30
 
@@ -42,12 +43,20 @@ generateGraph weights = fromList (rows ++ cols ++ [((0, 1), firstWeight)])
 
 --- file read
 
-main = print(shortestPath gr 0 vertices)
-    where t = [[131, 673, 234, 103,  18],
-               [201,  96, 342, 965, 150],
-               [630, 803, 746, 422, 111],
-               [537, 699, 497, 121, 956],
-               [805, 732, 524,  37, 331]]
-          gr = generateGraph t
-          vertices = (foldl (++) [] (generateVertices 5 5 0))
+convertLine line = Data.List.map (\v -> (read v :: Int)) (splitRegex (mkRegex ",") line)
+prepareFile str = Data.List.map (\l -> convertLine l) lines
+    where lines = (Data.List.filter (\l -> (length l) > 0) (splitRegex (mkRegex "\r\n") str))
+
+processMatrix matrix = Data.Map.lookup lastVertex (fromList distances)
+    where firstRow:_ = matrix
+          height = length matrix
+          width = length firstRow
+          vertices = (foldl (++) [] (generateVertices height width 0))
+          lastVertex = foldl max 0 vertices
+          graph = generateGraph matrix
+          distances = shortestPath graph 0 vertices
+
+main = do file <- readFile "/home/bartek/workspace/matrix.txt"
+          print (processMatrix (prepareFile file))
+
 
